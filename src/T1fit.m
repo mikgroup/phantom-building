@@ -1,17 +1,18 @@
 % JT 07-2016
 
-imgs_raw = sqreadcfl('~/Desktop/2016-07-19_phantom-test/sandbox/t1_tir_img');
-[ny, nz, ns, T, R] = size(imgs_raw);
-imgs_raw = squeeze(imgs_raw(:,:,:,1,:)); % only need first spin echo
+imgs_raw = sqreadcfl('~/Desktop/2016-08-01_phantom-test/exam2/ir_cimg');
+[ny, nz, ns, nc, nt] = size(imgs_raw);
 %%
-d1 = squeeze(dimnorm(imgs_raw(:,:,3,:), 4));
-mask = d1 > .05*max(d1(:));
+d1 = dimnorm(imgs_raw, 5);
+d2 = dimnorm(d1, 4);
+mask = d2 > .01*max(d2(:));
+clear d1 d2
+% inv_times = [250, 499, 1000] * 1e-3; % 2016-07-19_phantom-test
+inv_times = [100, 300, 500, 700, 900] * 1e-3; % 2016-08-01_phantom-test
 
-inv_times = [250, 499, 1000] * 1e-3;
-
-proton1 = zeros(ny, nz, ns);
-proton2 = zeros(ny, nz, ns);
-T1est = zeros(ny, nz, ns);
+proton1 = zeros(ny, nz, ns, nc);
+proton2 = zeros(ny, nz, ns, nc);
+T1est = zeros(ny, nz, ns, nc);
 
 %% 15 sec on [320, 322, 5, 3] using Joelle's awesome method
 % S(TIn) = (a + b exp(-TIn/T1)), where a and b are complex-valued
@@ -24,20 +25,20 @@ nlsS = getNLSStruct(extra);
 
 tic
 s = 60;
-p = s/(ny*nz*ns);
+p = s/(ny*nz*ns*nc);
 fprintf(1,'|%s|\n|\n',repmat('-',1,s));
-parfor ii=1:ny*nz*ns
+parfor ii=1:ny*nz*ns*nc
     if rand < p
         fprintf(1,'\b.\n'); % \b is backspace
     end
-    [yy, zz, cc, ss] = ind2sub([ny, nz, ns], ii);
-    mm = mask(yy, zz);
+    [yy, zz, ss, cc] = ind2sub([ny, nz, ns, nc], ii);
+    mm = mask(yy, zz, ss);
     if mm == 0
         proton1(ii) = 0;
         proton2(ii) = 0;
         T1est(ii) = 0;
     else
-        y_cplx = squeeze(imgs_raw(yy,zz,ss,:));
+        y_cplx = squeeze(imgs_raw(yy,zz,ss,cc,:));
 
 
         [T1, v1, v2, res] = rdNls(y_cplx, nlsS);
@@ -50,8 +51,9 @@ end
 toc
 %%
 figure(1); hist(T1est(T1est~=0)*1000, 100); faxis
-st(1000*bsxfun(@times, mean(mean(T1est,3),4), mask), [0, 1000]); colormap('default'), colorbar;
+st(1000*bsxfun(@times, mean(mean(T1est,3),4), mask), [0, 600]); colormap('default'), colorbar;
 title('T1 map (ms)'); faxis
+%%
 st(1000*bsxfun(@times, T1est, mask), [0, 1000]); colormap('default'), colorbar;
 title('T1 map (ms)'); faxis
 stc(bsxfun(@times, proton1, mask)); colormap('default'), colorbar;
