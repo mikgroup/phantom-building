@@ -1,14 +1,15 @@
 % JT 07-2016
-imgs_raw = sqreadcfl('~/Desktop/2016-08-01_phantom-test/exam2/se_cimg');
+imgs_raw = sqreadcfl('~/Desktop/2016-08-01_phantom-test/exam1/se_cimg');
 [ny, nz, ns, nc, nt] = size(imgs_raw);
 %%
 d1 = dimnorm(imgs_raw, 5);
 d2 = dimnorm(d1, 4);
-mask = d2 > .01*max(d2(:));
+mask = d2 > .05*max(d2(:));
 clear d1 d2
 
 echo_times = [10, 30, 50, 70, 90]*1e-3; % 2016-08-01_phantom-test
 
+%%
 proton = zeros(ny, nz, ns, nc);
 T2est = zeros(ny, nz, ns, nc);
 
