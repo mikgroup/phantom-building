@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# put dat files in order of increasing TE, without .dat extension
+# without .dat extension
 data=( meas_MID36_se_FID281892  meas_MID41_se_FID281897 meas_MID37_se_FID281893 meas_MID39_se_FID281895 meas_MID40_se_FID281896 )
 
 for dat in "${data[@]}" ; do

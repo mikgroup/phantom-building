@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# put dat files in order of increasing TE, without .dat extension
-data=( meas_MID36_se_FID281892  meas_MID41_se_FID281897 meas_MID37_se_FID281893 meas_MID39_se_FID281895 meas_MID40_se_FID281896 )
+# without .dat extension
+data=( meas_MID17_t1_tir_ax_FID283081 meas_MID18_t1_tir_ax_FID283082 meas_MID19_t1_tir_ax_FID283083 )
 
 for dat in "${data[@]}" ; do
 	bart twixread -A $dat.dat $dat-ksp.ra
@@ -17,7 +17,7 @@ for dat in "${data[@]}" ; do
 	#bart fmac -C -s 8 $dat-cimg $dat-sens $dat
 done
 
-bart join 5 ${data[*]} se_cimg
+bart join 5 ${data[*]} ir_cimg
 
 for dat in "${data[@]}" ; do
 	rm $dat.cfl $dat.hdr
