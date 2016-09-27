@@ -1,4 +1,4 @@
-load ~/Desktop/2016-09-07_phantom-test/T1fit.mat
+load /Users/jtamir/Desktop/2016-09-18-phantom_test/T2fit_20160918.mat
 rng(10);
 labels_cc = zeros(size(mask));
 SE = strel('diamond',2);
@@ -15,14 +15,25 @@ clear labels_cc m0 m1 L SE
 num = max(reshape(labels, [], ns), [], 1).';
 
 %%
-slices = [1];
-idx1 = [2, 5, 9, 1, 6, 10, 4, 7, 12, 3, 8, 11];
-idxs = {idx1};
+slices = [5];
+% idx2 = [2, 5, 9, 1, 6, 10, 3, 7, 11, 4, 8, 12];
+% idx3 = [2, 6, 9, 1, 5, 10, 3, 7, 11, 4, 8, 12];
+% idx4 = [2, 6, 9, 1, 5, 10, 3, 7, 11, 4, 8, 12];
+% idx5 = [2, 5, 9, 1, 6, 10, 3, 7, 11, 4, 8, 12];
+% idx6 = [2, 5, 9, 1, 6, 10, 3, 7, 11, 4, 8, 12];
+% idx10 = [2, 5, 9, 1, 6, 10, 3, 7, 11, 4, 8, 12];
+% idx11 = [2, 5, 9, 1, 6, 10, 3, 7, 11, 4, 8, 12];
+% idx12 = [2, 6, 9, 1, 5, 10, 3, 7, 11, 4, 8, 12];
+% idx13 = [2, 6, 9, 1, 5, 10, 3, 7, 11, 4, 8, 12];
+% idx14 = [2, 5, 9, 1, 6, 10, 3, 7, 11, 4, 8, 12];
+idx5 = [3, 6, 2, 5, 1, 4];
+
+idxs = {idx5};
 
 R1vals = cell(1, length(slices));
 
-map = T1est;
-
+map = T2est;
+VV = {};
 for ii=1:length(slices)
     sl = slices(ii);
     idx = idxs{ii};
@@ -41,20 +52,20 @@ for ii=1:length(slices)
     end
     v = v(1:2:end);
     v2 = v2(1:2:end);
+    VV{end+1} = v2;
     
     R1vals{ii} = reverse(v);
 end
 
 %%
-axis1 = [.2, .4, .6, .8, 1, 1.2]; % mM MnCl2
-
+axis1 = [.3, .6, .9]; % mM MnCl2
 
 xlabel1 = 'mM MnCl2';
 
 xlabels = {xlabel1};
 
 axis = {axis1};
-
+slices = 1;
 R1trend = zeros(2, length(slices));
 
 for ii=1:length(slices)

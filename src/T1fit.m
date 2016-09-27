@@ -1,7 +1,6 @@
 % JT 07-2016
 
-imgs_raw = sqreadcfl('~/Desktop/2016-09-07_phantom-test/ir_cimg-slice2');
-imgs_raw = permute(imgs_raw, [1, 2, 5, 3, 4]);
+imgs_raw = sqreadcfl('ir_cimg');
 [ny, nz, ns, nc, nt] = size(imgs_raw);
 %%
 d1 = dimnorm(imgs_raw, 5);
