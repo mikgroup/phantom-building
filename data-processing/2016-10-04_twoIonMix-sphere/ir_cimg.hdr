@@ -1,0 +1,8 @@
+# Dimensions
+256 92 16 4 1 5 1 1 1 1 1 1 1 1 1 1 
+# Command
+join 5 meas_MID35_t1_ir_se_TI100_FID291943 meas_MID36_t1_ir_se_TI300_FID291944 meas_MID37_t1_ir_se_TI500_FID291945 meas_MID38_t1_ir_se_TI700_FID291946 meas_MID39_t1_ir_se_TI900_FID291947 ir_cimg 
+# Files
+ >ir_cimg <meas_MID39_t1_ir_se_TI900_FID291947 <meas_MID38_t1_ir_se_TI700_FID291946 <meas_MID37_t1_ir_se_TI500_FID291945 <meas_MID36_t1_ir_se_TI300_FID291944 <meas_MID35_t1_ir_se_TI100_FID291943
+# Creator
+BART v0.3.01-316-g16a37ac-dirty

@@ -1,66 +1,61 @@
 % JT 07-2016
-T2imgs_raw = sqreadcfl('se_cimg');
-T2imgs_raw = T2imgs_raw(:,:,[4, 12], :, :); % only map specific slices
-[ny, nz, ns, nc, nt] = size(T2imgs_raw);
+
+T1imgs_raw = sqreadcfl('ir_cimg');
+T1imgs_raw = T1imgs_raw(:,:,[4, 12], :, :);  % only map specific slices
+[ny, nz, ns, nc, nt] = size(T1imgs_raw);
 %%
-d1 = dimnorm(reshape(T2imgs_raw, ny, nz, ns, []), 4);
-T2mask = d1 > .1*max(d1(:));
-st(T2mask)
+d1 = dimnorm(reshape(T1imgs_raw, ny, nz, ns, []), 4);
+T1mask = d1 > .1*max(d1(:));
+st(T1mask)
 
-
-echo_times = [10, 30, 50, 70, 120]*1e-3; %
+inv_times = [100, 300, 500, 700, 900] * 1e-3; % 2016-08-01_phantom-test
+TE = 8780e-6;
+TF = 4;
+TR = 4;
+%%
+proton1 = zeros(ny, nz, ns, nc);
+proton2 = zeros(ny, nz, ns, nc);
+T1est = zeros(ny, nz, ns, nc);
 
 %%
-proton = zeros(ny, nz, ns, nc);
-T2est = zeros(ny, nz, ns, nc);
+extra.T1Vec = (1:5000)*1e-3;
+extra.tVec = inv_times;
+nlsS = getNLSStruct(extra);
 
-%% 300 sec on [256, 256, 6, 32]
-myfun0 = @(v, echo_times) complex(v(1), v(2)) * exp(-echo_times*v(3));
-myfun = @(v, echo_times) [real(myfun0(v, echo_times)), imag(myfun0(v, echo_times))];
-ops = optimoptions('lsqcurvefit','TolFun', 1e-10, 'Display', 'off');
-LB = [-inf, -inf, 1/10];
-UB = [inf, inf, 1/5e-3];
+
 tic
 s = 60;
 p = s/(ny*nz*ns*nc);
-rvals = rand(ny*nz*ns*nc, 1);
 fprintf(1,'|%s|\n|\n',repmat('-',1,s));
 parfor ii=1:ny*nz*ns*nc
-    if rvals(ii) < p
+    if rand < p
         fprintf(1,'\b.\n'); % \b is backspace
     end
     [yy, zz, ss, cc] = ind2sub([ny, nz, ns, nc], ii);
-    mm = T2mask(yy, zz, ss);
+    mm = T1mask(yy, zz, ss);
     if mm == 0
-        proton(ii) = 0;
-        T2est(ii) = 0;
+        proton1(ii) = 0;
+        proton2(ii) = 0;
+        T1est(ii) = 0;
     else
-        % -- complex-valued fit  -- %
-        y_cplx = squeeze(T2imgs_raw(yy,zz,ss,cc,:));
-        y = [real(y_cplx), imag(y_cplx)];
-        v0 = [1e-4, 1e-4, 1/60e-3];
-        [v, resnorm, res, exitflag, output] = ...
-            lsqcurvefit(myfun, v0, echo_times.', y, LB, UB, ops);
+        y_cplx = squeeze(T1imgs_raw(yy,zz,ss,cc,:));
+
+        [T1, v1, v2, res] = rdNls(y_cplx, nlsS);
         
-        proton(ii) = complex(v(1), v(2));
-        T2est(ii) = 1/v(3);
-        
-        % -- magnitude fit -- %
-        %             y = abs(y_cplx);
-        %             F = fit(echo_times.', y, 'exp1');
-        %             x = [F.b, F.a];
-        %             proton(yy, zz) = F.a;
-        %             T2est(yy, zz) = -1/F.b;
+        proton1(ii) = v1;
+        proton2(ii) = v2;
+        T1est(ii) = T1;
     end
-    %     toc
 end
 toc
-
 %%
-T2vals = T2est(T2est~=0);
-figure(1); hist(T2vals(T2vals<.2)*1000, 100); faxis
+T1vals = T1est(T1est~=0);
+figure(11); hist(T1vals(T1vals<3)*1000, 100); faxis
+%%
+st(1000*bsxfun(@times, T1est, T1mask), [0, 1300]); colormap('parula'), colorbar;
+title('T1 map (ms)'); faxis
 %
-st(1000*bsxfun(@times, T2est, T2mask), [0, 160]); colormap('parula'), colorbar;
-title('T2 map (ms)'); faxis
-stc(bsxfun(@times, proton, T2mask)); colormap('parula'), colorbar;
-title('proton density'); faxis
+stc(bsxfun(@times, proton1, T1mask)); colormap('parula'), colorbar;
+title('mag1 map'); faxis
+stc(bsxfun(@times, proton2, T1mask)); colormap('parula'), colorbar;
+title('mag2 map'); faxis

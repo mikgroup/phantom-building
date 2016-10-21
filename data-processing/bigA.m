@@ -1,18 +1,62 @@
+cd 2016-10-10.pure_t1_ir;
+T1trend;
+bigAmat = A;
+bigYmat = yMat;
+clearvars -except bigAmat bigYmat;
+
+cd ../2016-10-17_pureIR_SE
+T1trend;
+bigAmat = [bigAmat ; A];
+bigYmat = [bigYmat ; yMat];
+clearvars -except bigAmat bigYmat
+
+T2trend;
+bigAmat = [bigAmat ; A];
+bigYmat = [bigYmat ; yMat];
+clearvars -except bigAmat bigYmat
+
+cd ../2016-10-04_twoIonMix-sphere
+T2trend;
+bigAmat = [bigAmat ; A];
+bigYmat = [bigYmat ; yMat];
+clearvars -except bigAmat bigYmat
+
+cd ../2016-10-19_niclmncl_mix
+T1trend;
+bigAmat = [bigAmat ; A];
+bigYmat = [bigYmat ; yMat];
+clearvars -except bigAmat bigYmat
+
+T2trend;
+bigAmat = [bigAmat ; A];
+bigYmat = [bigYmat ; yMat];
+clearvars -except bigAmat bigYmat
+
+cd ..
+
+sol = bigAmat \ bigYmat
+
+indsToRemove = find(bigYmat > 1200);
+
+for i = 1:length(indsToRemove)
+    
+end
+
 %% Paramagnetic Ions
 % Ni  Mn
 %
 ions = {'NiCl_2', 'MnCl_2'};
 molarMass = [129.6, 125.844];
-m1 = [0.613, 7.417];
-rW1 = [0.238, 0.444];
-m2 = [0.773, 84.996];
-rW2 = [3.880, 3.530];
+m1 = [sol(1), sol(2)];
+rW1 = [sol(5), sol(5)];
+m2 = [sol(3), sol(4)];
+rW2 = [sol(6), sol(6)];
 
 ion1 = 1;
 ion2 = 2;
 fprintf('Ion 1 = %s, Ion 2 = %s\n', ions{ion1}, ions{ion2})
 
-r2_range = 0.01:0.01:40;
+r2_range = 0.01:0.01:200;
 rW1fixed = mean(rW1);
 rW2fixed = mean(rW2);
 
@@ -20,13 +64,13 @@ r2fun = @(ii) m1(ii) / m2(ii) * (r2_range - rW2fixed) + rW1fixed;
 t2fun = @(ii) m2(ii) / (m1(ii)*(r2_range - rW2fixed) + rW1fixed);
 
 
-t2mix = [80, 110, 110, 120, 60, 70];
+t2mix = [80, 110, 110, 120, 40, 60];
 t1mix = [830, 500, 1230, 1000, 250, 500];
 
 r2mix = 1000./t2mix;
 r1mix = 1000./t1mix;
 
-figure(11);
+figure(1);
 plot(r2_range, r2fun(ion1), r2_range, r2fun(ion2), r2_range, 0 * r2_range, 'k--', r2mix, r1mix, '+', 'linewidth', 2)
 grid on
 grid minor
@@ -37,7 +81,7 @@ ylim([.1, 15]);
 legend(sprintf('%s bound', ions{ion1}), sprintf('%s bound', ions{ion2}), 'target values')
 faxis;
 
-figure(12);
+figure(2);
 plot(1000./r2_range, 1000./r2fun(ion1), 1000./r2_range, 1000./r2fun(ion2), 1000./r2mix, 1000./r1mix, '+', 'linewidth', 2)
 grid on
 grid minor

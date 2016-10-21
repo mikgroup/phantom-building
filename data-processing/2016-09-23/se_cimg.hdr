@@ -1,0 +1,8 @@
+# Dimensions
+256 102 10 4 1 4 1 1 1 1 1 1 1 1 1 1 
+# Command
+join 5 meas_MID20_t2_se_TE10_FID290402 meas_MID21_t2_se_TE30_FID290403 meas_MID22_t2_se_TE50_FID290404 meas_MID23_t2_se_TE90_FID290405 se_cimg 
+# Files
+ >se_cimg <meas_MID23_t2_se_TE90_FID290405 <meas_MID22_t2_se_TE50_FID290404 <meas_MID21_t2_se_TE30_FID290403 <meas_MID20_t2_se_TE10_FID290402
+# Creator
+BART v0.3.01-237-g95fe8bb
