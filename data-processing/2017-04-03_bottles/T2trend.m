@@ -1,10 +1,10 @@
 %clear
 close all
 
-load T1fit.mat
+load T2fit.mat
 rng(10);
 
-mask = mask;
+mask = T2mask;
 
 labels_cc = zeros(size(mask));
 boundaries = cell(length(ns), 1);
@@ -82,12 +82,14 @@ num = max(reshape(labels, [], ns), [], 1).';
 %%
 slices = [1];
 idx1 = [1, 4, 3, 5, 2, 6];
+%idx1 = [1, 4, 3, 5];
+%idx1 = [3, 5, 2, 6];
 
 idxs = {idx1};
 
 R1vals = cell(1, length(slices));
 
-map = T1est;
+map = T2est;
 
 for ii=1:length(slices)
     sl = slices(ii);
@@ -120,6 +122,7 @@ mnclConc = [0.4449, 0.3146, 0.7077, 0.6412, 0.5494, 0.4895];
 agarWV = [0.0054, 0.0075, 0.0064, 0.0075, 0.0165, 0.0175];
 
 %order = [4,3,2,1,6,5];
+%order = [4,3,2,1];
 order = [3,4,1,2,5,6];
 niclConc = niclConc(order);
 mnclConc = mnclConc(order);
@@ -134,7 +137,7 @@ yMat = zeros(numPoints,1);
 A = zeros(numPoints, 8);
 ind = 1;
 
-t1 = true;
+t1 = false;
 
 for i = 1:length(v2)
     kA = niclConc(i);
