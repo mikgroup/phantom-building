@@ -1,11 +1,12 @@
-%clear
-close all
-
 load T1fit.mat
-rng(10);
+rng(1);
 
-mask = mask(63:150,:,:,:);
-T1est = T1est(63:150,:,:,:);
+T1est_orig = T1est;
+T1est = flip(flip(T1est, 1), 2);
+mask_orig = mask;
+mask = flip(flip(mask, 1), 2);
+
+mask = mask;
 
 labels_cc = zeros(size(mask));
 boundaries = cell(length(ns), 1);
@@ -29,12 +30,7 @@ clear labels_cc m0 m1 L B SE
 for sl = 1:size(labels,3)
     % Plots boundaries
     % make sure these are not touching
-    %imshow(label2rgb(labels(:,:,sl), @jet, [.5 .5 .5]))
-    st((labels(:,:,sl) > 0).*mean(1000.*T1est(:,:,sl,:),4),[])
-    colormap(gca, 'parula')
-    colorbar
-    axis off
-    title('T1 Map (ms)')
+    imshow(label2rgb(labels(:,:,sl), @jet, [.5 .5 .5]))
     
     bl = 6;
     
@@ -47,7 +43,7 @@ for sl = 1:size(labels,3)
     % Find centers of blobs
     stats = regionprops(labels(:,:,sl), 'centroid');
     centers = cat(1,stats.Centroid);
-    %plot(centers(:,1), centers(:,2), 'ro');
+    plot(centers(:,1), centers(:,2), 'ro');
     
     % Compute minimum inscribing circle for each blob
     radii = zeros(length(centers(:,1)),1);
@@ -85,11 +81,10 @@ for sl = 1:size(labels,3)
 end
 num = max(reshape(labels, [], ns), [], 1).';
 
+
 %%
 slices = [1];
-%idx1 = [1, 4, 3, 5, 2, 6];
-idx1 = [1, 3, 2, 4];
-
+idx1 = [6,5,3,4,1,2,10,7,8,9,11,12];
 
 idxs = {idx1};
 
@@ -117,21 +112,15 @@ for ii=1:length(slices)
     
     R1vals{ii} = v;
 end
+hold off
+
 
 %%
 
-% current order is gray, white, cartilage... 1,2,1,2,1,2
-% copied from spreadsheet
-% actual order is white2, white1, gray2, gray1, cart2, cart1 ? i think
-niclConc = 0.25 .* [0, 1.5775, 0, 0.8048, 0, 0.7255];
-mnclConc = 0.25 .* [0.4449, 0.3146, 0.7077, 0.6412, 0.5494, 0.4895];
-agarWV = [0.0054, 0.0075, 0.0064, 0.0075, 0.0165, 0.0175];
-
-%order = [4,3,2,1,6,5];
-order = [3,4,1,2,5,6];
-niclConc = niclConc(order);
-mnclConc = mnclConc(order);
-agarWV = agarWV(order);
+baseWV = 4.5 / 300;
+vialTotal = 20;
+vialGelVol = [0, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 20];
+vialWV = vialGelVol/vialTotal * baseWV;
 
 numPoints = 0;
 for i = 1:length(v2)
@@ -139,30 +128,10 @@ for i = 1:length(v2)
 end
 
 yMat = zeros(numPoints,1);
-A = zeros(numPoints, 8);
+A = zeros(numPoints, 4);
 ind = 1;
 
-t1 = true;
+figure;
+plot(vialWV, R1vals{1});
 
-for i = 1:length(v2)
-    kA = niclConc(i);
-    kB = mnclConc(i);
-    agarConc = agarWV(i);
-    
-    for j = 1:length(v2{i})
-       if (t1)
-        A(ind,:) = [kA kB agarConc 0 0 0 1 0];
-        yMat(ind) = v2{i}(j);
-       else
-        A(ind,:) = [0 0 0 kA kB agarConc 0 1];
-        yMat(ind) = v2{i}(j);
-       end
-       ind = ind + 1;
-    end
-end
-
-
-
-%plot(agarWV, 1000./R1vals{1}, 'ro');
-
-A \ yMat
+%A \ yMat

@@ -49,10 +49,12 @@ axis1 = [6, 8, 10, 12, 14, 16]; % mM NiCl2
 axis2 = [.05, .1, .15, .2, .25, .3]; % mM MnCl2
 
 
-xlabel1 = 'mM NiCl2';
-xlabel2 = 'mM MnCl2';
+xlabel1 = 'NiCl_2 Concentration (mM)';
+xlabel2 = 'MnCl_2 Concentration (mM)';
 
 xlabels = {xlabel1, xlabel2};
+
+figNames = {'NiCl2_T1', 'MnCl2_T1'};
 
 axiss = {axis1, axis2};
 
@@ -61,16 +63,33 @@ R1trend = zeros(2, length(slices));
 for ii=1:length(slices)
     [P, S] = polyfit(axiss{ii}.', R1vals{ii}, 1);
     [Y, E] = polyconf(P, axiss{ii}, S);
+    extendPerc = 0.15;
+    lowerExtend = min(axiss{ii}) - extendPerc * mean([min(axiss{ii}), max(axiss{ii})]);
+    upperExtend = max(axiss{ii}) + extendPerc * mean([min(axiss{ii}), max(axiss{ii})]);
+    axisExtend = lowerExtend:0.01:upperExtend;
+    [yExtend, eExtend] = polyconf(P, axisExtend, S);
     R1trend(:, ii) = P;
     
-    figure(ii);
-    plot(axiss{ii}, R1vals{ii}, 'o', 'linewidth', 3)
+    fig(ii) = figure(ii*10);
+    ax = gca;
+    h = plot(axisExtend, yExtend, 'linewidth', 2);
+    set(get(get(h,'Annotation'),'LegendInformation'),'IconDisplayStyle','off'); % do not plot legend for this
     hold on;
-    errorbar(axiss{ii}, Y, E, 'k--', 'linewidth', 2);
+    ax.ColorOrderIndex = ax.ColorOrderIndex - 1;
+    errorbar(axiss{ii}, Y, E, 'linewidth', 2, 'Capsize', 10);
+    plot(axiss{ii}, R1vals{ii}, '+', 'MarkerSize', 10, 'LineWidth', 3)
     hold off
+    
     xlabel(xlabels{ii});
     ylabel('R1 (1/s)');
-    legend('data', 'fit with 95% CI');
-    axis square;
-    fprintf('%20s:\tm1 = %.3f\tR1w = %.3f\n', xlabels{ii}, R1trend(1, ii), R1trend(2, ii));
+    
+    legend({'Fit (95% CI)', 'Data'}, 'Location', 'northwest');
+    %xlim([0,0.35]);
+    %ylim([0, 35]);
+    axis tight
+    axis square
+    fprintf('%20s:\tm1= %.3f\tR1w = %.3f\n', xlabels{ii}, R1trend(1, ii), R1trend(2, ii));
+    faxis(gca, 20);
+    saveas(fig(ii), strcat('~/Google Drive Berkeley/phantom-building/figs/9_27_mapping/',figNames{ii}), 'svg');
 end
+

@@ -4,7 +4,9 @@ close all
 load T2fit.mat
 rng(10);
 
-mask = T2mask;
+
+mask = T2mask(63:150,:,:,:);
+T2est = T2est(63:150,:,:,:);
 
 labels_cc = zeros(size(mask));
 boundaries = cell(length(ns), 1);
@@ -28,8 +30,12 @@ clear labels_cc m0 m1 L B SE
 for sl = 1:size(labels,3)
     % Plots boundaries
     % make sure these are not touching
-    imshow(label2rgb(labels(:,:,sl), @jet, [.5 .5 .5]))
-    
+    %imshow(label2rgb(labels(:,:,sl), @jet, [.5 .5 .5]))
+    st((labels(:,:,sl) > 0).*mean(1000.*T2est(:,:,sl,:),4),[])
+    colormap(gca, 'parula')
+    colorbar
+    axis off
+    title('T2 Map (ms)')
     bl = 6;
     
     hold on
@@ -41,7 +47,7 @@ for sl = 1:size(labels,3)
     % Find centers of blobs
     stats = regionprops(labels(:,:,sl), 'centroid');
     centers = cat(1,stats.Centroid);
-    plot(centers(:,1), centers(:,2), 'ro');
+    %plot(centers(:,1), centers(:,2), 'ro');
     
     % Compute minimum inscribing circle for each blob
     radii = zeros(length(centers(:,1)),1);
@@ -81,7 +87,8 @@ num = max(reshape(labels, [], ns), [], 1).';
 
 %%
 slices = [1];
-idx1 = [1, 4, 3, 5, 2, 6];
+%idx1 = [1, 4, 3, 5, 2, 6];
+idx1 = [1, 3, 2, 4];
 %idx1 = [1, 4, 3, 5];
 %idx1 = [3, 5, 2, 6];
 

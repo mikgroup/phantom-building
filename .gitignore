@@ -1,3 +1,6 @@
 *.cfl
+*.hdr
 *~
 *.mat
+*.dat
+*.svg

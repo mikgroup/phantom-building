@@ -118,4 +118,13 @@ for ii=1:length(slices)
     fprintf('%20s:\tm1 = %.3f\tR1w = %.3f\n', xlabels{ii}, R1trend(1, ii), R1trend(2, ii));
 end
 
+
+vAvg = zeros(length(v)/2, 1);
+for i = 1:2:length(v)
+    vAvg(floor(i/2) + 1) = mean(v([i,i+1]));
+end 
+t2Avg = sort(1000./vAvg)';
+[t2TargetSort, t2SortOrder] = sort(targetT2);
+t2err = abs((t2Avg - t2TargetSort)./t2TargetSort) * 100
+
 %A \ yMat

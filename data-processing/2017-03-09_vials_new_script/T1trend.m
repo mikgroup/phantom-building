@@ -2,10 +2,10 @@
 close all
 
 load T1fit.mat
-rng(10);
+rng(1);
 
-mask = mask(63:150,:,:,:);
-T1est = T1est(63:150,:,:,:);
+mask = mask(73:184,:,:,:);
+T1est = T1est(73:184,:,:,:);
 
 labels_cc = zeros(size(mask));
 boundaries = cell(length(ns), 1);
@@ -29,6 +29,7 @@ clear labels_cc m0 m1 L B SE
 for sl = 1:size(labels,3)
     % Plots boundaries
     % make sure these are not touching
+    im = label2rgb(labels(:,:,sl), @jet, [.5 .5 .5]);
     %imshow(label2rgb(labels(:,:,sl), @jet, [.5 .5 .5]))
     st((labels(:,:,sl) > 0).*mean(1000.*T1est(:,:,sl,:),4),[])
     colormap(gca, 'parula')
@@ -68,7 +69,7 @@ for sl = 1:size(labels,3)
     circMask = zeros(size(labels(:,:,sl)));
     
     for blob = 1:length(centers(:,1))
-        viscircles(centers(blob,:), radiiToUse(blob), 'Color', 'b');
+        viscircles(centers(blob,:), radiiToUse(blob), 'Color', 'b', 'LineWidth', 1);
         
         circMask = circMask + ...
             double(sqrt((x - centers(blob,1)).^2 + ...
@@ -76,8 +77,8 @@ for sl = 1:size(labels,3)
         
         row = ceil(centers(blob,1));
         col = ceil(centers(blob,2));
-        h = text(row, col, num2str(labels(col, row, 1)));
-        set(h,'FontSize',14,'FontWeight','bold');
+        %h = text(row, col, num2str(labels(col, row, 1)));
+        %set(h,'FontSize',14,'FontWeight','bold');
     end
     
     labels(:,:,sl) = labels(:,:,sl) .* circMask;
@@ -87,9 +88,10 @@ num = max(reshape(labels, [], ns), [], 1).';
 
 %%
 slices = [1];
-%idx1 = [1, 4, 3, 5, 2, 6];
-idx1 = [1, 3, 2, 4];
-
+% For 0.11
+idx1 = [6, 12, 18, 5, 10, 16, 3, 8, 13, 1, 9, 14, 4, 7, 15, 2, 11, 17];
+% For 0.07
+%idx1 = [5, 12, 18, 6, 10, 16, 3, 8, 13, 1, 9, 14, 4, 7, 15, 2, 11, 17];
 
 idxs = {idx1};
 
@@ -118,17 +120,14 @@ for ii=1:length(slices)
     R1vals{ii} = v;
 end
 
+
 %%
 
-% current order is gray, white, cartilage... 1,2,1,2,1,2
-% copied from spreadsheet
-% actual order is white2, white1, gray2, gray1, cart2, cart1 ? i think
-niclConc = 0.25 .* [0, 1.5775, 0, 0.8048, 0, 0.7255];
-mnclConc = 0.25 .* [0.4449, 0.3146, 0.7077, 0.6412, 0.5494, 0.4895];
-agarWV = [0.0054, 0.0075, 0.0064, 0.0075, 0.0165, 0.0175];
+niclConc = reshape(repmat(0.25.*[0.7725,5.2487,0.3245,1.3619,8.0507,2.6321]',1,3)',1,18);
+mnclConc = reshape(repmat(0.25.*[0.1715,0.0453,0.0986,0.0701,0.3776,0.2463]',1,3)',1,18);
+agarWV = repmat([2,2.5,3],1,6)./400;
 
-%order = [4,3,2,1,6,5];
-order = [3,4,1,2,5,6];
+order = (1:18);
 niclConc = niclConc(order);
 mnclConc = mnclConc(order);
 agarWV = agarWV(order);
