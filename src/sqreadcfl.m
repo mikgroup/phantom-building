@@ -6,5 +6,5 @@ function data = sqreadcfl(filenameBase)
 % JT
 % squeeze degenerate dimensions
 [a, b, ~] = fileparts(filenameBase);
-data = squeeze(readcfl([a, '/', b]));
+data = squeeze(readcfl([a, '', b]));
 end
