@@ -1,0 +1,8 @@
+# Dimensions
+256 92 1 4 1 3 1 1 1 1 1 1 1 1 1 1 
+# Command
+join 5 meas_MID237_t2_se_TE10_FID320132 meas_MID241_t2_se_TE50_FID320136 meas_MID238_t2_se_TE120_FID320133 se_cimg 
+# Files
+ >se_cimg <meas_MID238_t2_se_TE120_FID320133 <meas_MID241_t2_se_TE50_FID320136 <meas_MID237_t2_se_TE10_FID320132
+# Creator
+BART v0.3.01-237-g95fe8bb

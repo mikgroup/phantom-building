@@ -1,0 +1,8 @@
+# Dimensions
+256 256 1 1 1 1 1 5 1 1 1 1 1 1 1 1 
+# Command
+flip 0 ir_cimg /tmp/11-20-2020_slice_phantom/ir_cimg_jt 
+# Files
+ >/tmp/11-20-2020_slice_phantom/ir_cimg_jt <ir_cimg
+# Creator
+BART v0.4.04-11-g97d2ec70

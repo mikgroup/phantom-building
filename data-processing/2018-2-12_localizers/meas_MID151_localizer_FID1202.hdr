@@ -1,0 +1,8 @@
+# Dimensions
+512 231 6 4 1 1 1 1 1 1 1 1 1 1 2 1 
+# Command
+fft -iu 3 meas_MID151_localizer_FID1202-ksp-trp.ra meas_MID151_localizer_FID1202 
+# Files
+ >meas_MID151_localizer_FID1202 <meas_MID151_localizer_FID1202-ksp-trp.ra
+# Creator
+BART v0.3.01-237-g95fe8bb

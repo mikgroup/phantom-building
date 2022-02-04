@@ -1,0 +1,8 @@
+# Dimensions
+512 76 1 4 1 32 1 1 1 1 1 1 1 1 1 1 
+# Command
+join 7 meas_MID32_se_mc_ESP_8_7_TR_10000_FID58279 se_mc_cimg 
+# Files
+ >se_mc_cimg <meas_MID32_se_mc_ESP_8_7_TR_10000_FID58279
+# Creator
+BART v0.3.01-237-g95fe8bb

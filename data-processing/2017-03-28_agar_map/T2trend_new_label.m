@@ -138,3 +138,6 @@ ind = 1;
 
 figure;
 plot(vialWV, 1000./R2vals{1}, 'ro-');
+
+figure;
+plot(vialWV, R2vals{1}, 'ro-');

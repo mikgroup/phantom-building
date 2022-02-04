@@ -132,6 +132,9 @@ A = zeros(numPoints, 4);
 ind = 1;
 
 figure;
+plot(vialWV, 1000./R1vals{1});
+
+figure;
 plot(vialWV, R1vals{1});
 
 %A \ yMat

@@ -1,0 +1,8 @@
+# Dimensions
+512 128 1 4 1 32 1 1 1 1 1 1 1 1 1 1 
+# Command
+transpose 2 13 cpmg cpmg-trp 
+# Files
+ >cpmg-trp <cpmg
+# Creator
+BART v0.3.01-237-g95fe8bb

@@ -1,0 +1,8 @@
+# Dimensions
+256 52 1 4 1 5 1 1 1 1 1 1 1 1 1 1 
+# Command
+join 5 meas_MID345_vials_t1_ir_se_TI100_FID318874 meas_MID346_vials_t1_ir_se_TI500_FID318875 meas_MID347_vials_t1_ir_se_TI900_FID318876 meas_MID348_vials_t1_ir_se_TI1300_FID318877 meas_MID349_vials_t1_ir_se_TI2000_FID318878 ir_cimg 
+# Files
+ >ir_cimg <meas_MID349_vials_t1_ir_se_TI2000_FID318878 <meas_MID348_vials_t1_ir_se_TI1300_FID318877 <meas_MID347_vials_t1_ir_se_TI900_FID318876 <meas_MID346_vials_t1_ir_se_TI500_FID318875 <meas_MID345_vials_t1_ir_se_TI100_FID318874
+# Creator
+BART v0.3.01-237-g95fe8bb

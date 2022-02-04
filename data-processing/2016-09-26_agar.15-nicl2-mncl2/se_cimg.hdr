@@ -1,0 +1,8 @@
+# Dimensions
+256 76 16 4 1 5 1 1 1 1 1 1 1 1 1 1 
+# Command
+join 5 meas_MID196_t2_se_TE10_FID290712 meas_MID197_t2_se_TE30_FID290713 meas_MID198_t2_se_TE50_FID290714 meas_MID199_t2_se_TE70_FID290715 meas_MID200_t2_se_TE90_FID290716 se_cimg 
+# Files
+ >se_cimg <meas_MID200_t2_se_TE90_FID290716 <meas_MID199_t2_se_TE70_FID290715 <meas_MID198_t2_se_TE50_FID290714 <meas_MID197_t2_se_TE30_FID290713 <meas_MID196_t2_se_TE10_FID290712
+# Creator
+BART v0.3.01-237-g95fe8bb

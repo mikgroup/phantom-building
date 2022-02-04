@@ -1,0 +1,8 @@
+# Dimensions
+256 256 1 1 1 1 1 6 1 1 1 1 1 1 1 1 
+# Command
+flip 0 se_cimg /tmp/11-20-2020_slice_phantom/se_cimg_jt 
+# Files
+ >/tmp/11-20-2020_slice_phantom/se_cimg_jt <se_cimg
+# Creator
+BART v0.4.04-11-g97d2ec70

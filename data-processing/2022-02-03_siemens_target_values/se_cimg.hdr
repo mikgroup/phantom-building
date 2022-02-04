@@ -1,0 +1,8 @@
+# Dimensions
+192 54 1 12 1 1 1 5 1 1 1 1 1 1 1 1 
+# Command
+join 7 P54272.7 P55296.7 P56320.7 P57344.7 P58368.7 se_cimg 
+# Files
+ >se_cimg <P58368.7 <P57344.7 <P56320.7 <P55296.7 <P54272.7
+# Creator
+BART v0.7.00

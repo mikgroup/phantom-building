@@ -1,0 +1,8 @@
+# Dimensions
+512 76 1 4 1 1 1 2 1 1 1 1 1 1 1 1 
+# Command
+join 7 meas_MID18_b1_gre_FA20_FID65570 meas_MID19_b1_gre_FA40_FID65571 b1_cimg 
+# Files
+ >b1_cimg <meas_MID19_b1_gre_FA40_FID65571 <meas_MID18_b1_gre_FA20_FID65570
+# Creator
+BART v0.3.01-237-g95fe8bb

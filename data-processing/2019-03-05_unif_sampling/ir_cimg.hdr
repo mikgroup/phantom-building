@@ -1,0 +1,8 @@
+# Dimensions
+512 76 1 4 1 1 1 5 1 1 1 1 1 1 1 1 
+# Command
+join 7 meas_MID12_t1_ir_se_TI100_FID65564 meas_MID13_t1_ir_se_TI500_FID65565 meas_MID14_t1_ir_se_TI900_FID65566 meas_MID15_t1_ir_se_TI1300_FID65567 meas_MID16_t1_ir_se_TI2000_FID65568 ir_cimg 
+# Files
+ >ir_cimg <meas_MID16_t1_ir_se_TI2000_FID65568 <meas_MID15_t1_ir_se_TI1300_FID65567 <meas_MID14_t1_ir_se_TI900_FID65566 <meas_MID13_t1_ir_se_TI500_FID65565 <meas_MID12_t1_ir_se_TI100_FID65564
+# Creator
+BART v0.3.01-237-g95fe8bb

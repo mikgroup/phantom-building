@@ -1,0 +1,8 @@
+# Dimensions
+512 58 1 4 1 5 1 1 1 1 1 1 1 1 1 1 
+# Command
+join 5 meas_MID280_t1_ir_se_TI100_FID366884 meas_MID281_t1_ir_se_TI500_FID366885 meas_MID282_t1_ir_se_TI900_FID366886 meas_MID283_t1_ir_se_TI1300_FID366887 meas_MID284_t1_ir_se_TI2000_FID366888 ir_cimg 
+# Files
+ >ir_cimg <meas_MID284_t1_ir_se_TI2000_FID366888 <meas_MID283_t1_ir_se_TI1300_FID366887 <meas_MID282_t1_ir_se_TI900_FID366886 <meas_MID281_t1_ir_se_TI500_FID366885 <meas_MID280_t1_ir_se_TI100_FID366884
+# Creator
+BART v0.3.01-237-g95fe8bb

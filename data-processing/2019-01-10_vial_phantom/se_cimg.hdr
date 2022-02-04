@@ -1,0 +1,8 @@
+# Dimensions
+512 76 1 4 1 1 1 5 1 1 1 1 1 1 1 1 
+# Command
+join 7 meas_MID27_t2_se_TE10_FID58274 meas_MID28_t2_se_TE25_FID58275 meas_MID29_t2_se_TE50_FID58276 meas_MID30_t2_se_TE75_FID58277 meas_MID31_t2_se_TE120_FID58278 se_cimg 
+# Files
+ >se_cimg <meas_MID31_t2_se_TE120_FID58278 <meas_MID30_t2_se_TE75_FID58277 <meas_MID29_t2_se_TE50_FID58276 <meas_MID28_t2_se_TE25_FID58275 <meas_MID27_t2_se_TE10_FID58274
+# Creator
+BART v0.3.01-237-g95fe8bb

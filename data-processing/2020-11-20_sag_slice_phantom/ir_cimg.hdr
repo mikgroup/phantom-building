@@ -1,0 +1,8 @@
+# Dimensions
+256 256 1 1 1 1 1 5 1 1 1 1 1 1 1 1 
+# Command
+join 7 P25600.7 P26112.7 P26624.7 P27136.7 P27648.7 ir_cimg 
+# Files
+ >ir_cimg <P27648.7 <P27136.7 <P26624.7 <P26112.7 <P25600.7
+# Creator
+BART v0.4.04-11-g97d2ec70

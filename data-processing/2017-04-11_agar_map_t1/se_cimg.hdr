@@ -1,0 +1,8 @@
+# Dimensions
+256 48 10 4 1 5 1 1 1 1 1 1 1 1 1 1 
+# Command
+join 5 meas_MID207_t2_se_TE10_FID321861 meas_MID214_t2_se_TE25_FID321868 meas_MID209_t2_se_TE50_FID321863 meas_MID213_t2_se_TE75_FID321867 meas_MID211_t2_se_TE120_FID321865 se_cimg 
+# Files
+ >se_cimg <meas_MID211_t2_se_TE120_FID321865 <meas_MID213_t2_se_TE75_FID321867 <meas_MID209_t2_se_TE50_FID321863 <meas_MID214_t2_se_TE25_FID321868 <meas_MID207_t2_se_TE10_FID321861
+# Creator
+BART v0.3.01-237-g95fe8bb
