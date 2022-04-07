@@ -1,0 +1,8 @@
+# Dimensions
+128 96 1 12 1 1 1 5 1 1 1 1 1 1 1 1 
+# Command
+join 7 P02048.7 P03072.7 P04608.7 P05632.7 P06656.7 ir_cimg 
+# Files
+ >ir_cimg <P06656.7 <P05632.7 <P04608.7 <P03072.7 <P02048.7
+# Creator
+BART v0.7.00
