@@ -1,0 +1,8 @@
+# Dimensions
+128 96 1 12 1 1 1 1 1 1 1 1 1 1 1 1 
+# Command
+fft -iu 3 P09728.7-ksp-trp.ra P09728.7 
+# Files
+ >P09728.7 <P09728.7-ksp-trp.ra
+# Creator
+BART v0.7.00

@@ -1,0 +1,8 @@
+# Dimensions
+128 96 1 12 1 1 1 1 1 1 1 1 1 1 1 1 
+# Command
+fft -iu 3 P05632.7-ksp-trp.ra P05632.7 
+# Files
+ >P05632.7 <P05632.7-ksp-trp.ra
+# Creator
+BART v0.7.00

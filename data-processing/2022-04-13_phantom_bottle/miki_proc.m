@@ -1,12 +1,12 @@
 %%
 
-addpath /Volumes/GoogleDrive/'Shared drives'/mikGroupDrive/Home/mlustig/Matlab/ESPIRiT/
-addpath /Volumes/GoogleDrive/'Shared drives'/mikGroupDrive/Home/mlustig/Matlab/ESPIRiT/utils/
-addpath /Volumes/GoogleDrive/'Shared drives'/mikGroupDrive/Home/mlustig/Matlab/ESPIRiT/ESPIRiT_code/
-addpath /Volumes/GoogleDrive/'Shared drives'/mikGroupDrive/Home/mlustig/Matlab/orchestra-sdk-2.0-1-2.matlab
-addpath /Volumes/GoogleDrive/'Shared drives'/mikGroupDrive/Home/mlustig/Matlab/orchestra-sdk-2.0-1-2.matlab/Scripts/
-addpath /Volumes/GoogleDrive/'Shared drives'/mikGroupDrive/Home/mlustig/Matlab/orchestra-sdk-2.0-1-2.matlab/Examples/
-addpath /Volumes/GoogleDrive/'Shared drives'/mikGroupDrive/Home/mlustig/Matlab/phantom-building/src/Utils
+addpath ~/'Google Drive'/'Shared drives'/mikGroupDrive/Home/mlustig/Matlab/ESPIRiT/
+addpath ~/'Google Drive'/'Shared drives'/mikGroupDrive/Home/mlustig/Matlab/ESPIRiT/utils/
+addpath ~/'Google Drive'/'Shared drives'/mikGroupDrive/Home/mlustig/Matlab/ESPIRiT/ESPIRiT_code/
+addpath ~/'Google Drive'/'Shared drives'/mikGroupDrive/Home/mlustig/Matlab/orchestra-sdk-2.0-1-2.matlab
+addpath ~/'Google Drive'/'Shared drives'/mikGroupDrive/Home/mlustig/Matlab/orchestra-sdk-2.0-1-2.matlab/Scripts/
+addpath ~/'Google Drive'/'Shared drives'/mikGroupDrive/Home/mlustig/Matlab/orchestra-sdk-2.0-1-2.matlab/Examples/
+addpath ~/'Google Drive'/'Shared drives'/mikGroupDrive/Home/mlustig/Matlab/phantom-building/src/Utils
 
 %%
 % file names
@@ -29,7 +29,7 @@ for n=1:length(files)
         if nameTI~= TI(c_TI);
             disp(sprintf('Warning! name TI=%d does not match sequence TI=%d',nameTI,TI(c_TI)));
         else
-            disp(sprintf('TI=%d',TI(c_TI)));
+            disp(sprintf('%s:TI=%d',files(n).name,TI(c_TI)));
         end
         kspaces_TI(:,:,:,c_TI) = pfile2kspace(pfile);
     end
@@ -40,7 +40,7 @@ for n=1:length(files)
         if nameTE~= TE(c_TE);
             disp(sprintf('Warning name TE=%d does not match sequence TE=%d',nameTE,TE(c_TE)));
         else
-            disp(sprintf('TI=%d',TE(c_TE)));
+            disp(sprintf('%s: TE=%d',files(n).name,TE(c_TE)));
         end
         kspaces_TE(:,:,:,c_TE) = pfile2kspace(pfile);
     end
@@ -108,10 +108,37 @@ end
     
 
 %% 
+% Gradient warp params
+
+corners = GERecon('Pfile.Corners', 1,pfile);
+orientation = GERecon('Pfile.Orientation', 1,pfile);
+images_TI_gw = [];
+for n=1:length(TI)
+    tmp = ifft2c(zpad(fft2c(images_TI(:,:,1,1,n)),[512,512]));
+    tmp = GERecon('Gradwarp', real(tmp), corners,'XRMW')+1j*GERecon('Gradwarp', imag(tmp), corners,'XRMW');
+    tmp = crop(ifft2c(crop(fft2c(tmp),[size(images_TI,1),size(images_TI,1)])),[size(images_TI,1),size(images_TI,2)]);
+    images_TI_gw(:,:,1,1,n) = tmp;
+end
+
+
+
+images_TE_gw = [];
+for n=1:length(TE)
+    tmp = ifft2c(zpad(fft2c(images_TE(:,:,1,1,n)),[512,512]));
+    tmp = GERecon('Gradwarp', real(tmp), corners,'XRMW')+1j*GERecon('Gradwarp', imag(tmp), corners,'XRMW');
+    tmp = crop(ifft2c(crop(fft2c(tmp),[size(images_TE,1),size(images_TE,1)])),[size(images_TE,1),size(images_TE,2)]);
+    images_TE_gw(:,:,1,1,n) = tmp;
+end
+%%
+images_TI_gw = images_TI;
+images_TE_gw = images_TE;
+
+
+%% 
 % T1 fit:
 
-[ny, nz, ns, nc, nt] = size(images_TI);
-d1 = dimnorm(images_TI, 5);
+[ny, nz, ns, nc, nt] = size(images_TI_gw);
+d1 = dimnorm(images_TI_gw, 5);
 d2 = d1;
 mask = d2 > .01*max(d2(:));
 inv_times = TI* 1e-3;
@@ -142,7 +169,7 @@ for ii=1:ny*nz*ns*nc
         proton2(ii) = 0;
         T1est(ii) = 0;
     else
-        y_cplx = squeeze(images_TI(yy,zz,ss,cc,:));
+        y_cplx = squeeze(images_TI_gw(yy,zz,ss,cc,:));
 
 
         [T1, v1, v2, res] = rdNls(y_cplx, nlsS);
@@ -154,10 +181,11 @@ for ii=1:ny*nz*ns*nc
 end
 toc
 
+save T1fit.mat
 %%
 % Display T1
 
-figure(1); hist(T1est(T1est>0.01 & T1est < 3)*1000, 400); faxis
+figure(1); hist(T1est(T1est>0.01 & T1est < 4.5)*1000, 400); faxis
 st(1000*bsxfun(@times, T1est, mask), [0, 2700]); colormap('parula'), colorbar;
 title('T1 map (ms)'); faxis
 
@@ -175,8 +203,8 @@ title('mag2 map'); faxis
 % T2 fit:
 % 300 sec on [256, 256, 6, 32]
 
-[ny, nz, ns, nc, nt] = size(images_TE);
-d1 = dimnorm(images_TE, 5);
+[ny, nz, ns, nc, nt] = size(images_TE_gw);
+d1 = dimnorm(images_TE_gw, 5);
 d2 = d1;
 T2mask = d2 > .01*max(d2(:));
 echo_times = TE*1e-3;
@@ -205,7 +233,7 @@ parfor ii=1:ny*nz*ns*nc
         T2est(ii) = 0;
     else
         % -- complex-valued fit  -- %
-        y_cplx =squeeze(images_TE(yy,zz,ss,cc,:));
+        y_cplx =squeeze(images_TE_gw(yy,zz,ss,cc,:));
         y = [real(y_cplx), imag(y_cplx)];
         v0 = [1e-4, 1e-4, 1/60e-3];
         [v, resnorm, res, exitflag, output] = ...
@@ -224,13 +252,13 @@ parfor ii=1:ny*nz*ns*nc
     %     toc
 end
 toc
-
+save T2fit.mat
 %%
 % display T2
 T2vals = T2est(T2est~=0);
-figure(1); hist(T2vals(T2vals<2)*1000, 100); faxis
+figure(1); hist(T2vals(T2vals<0.300)*1000, 600); faxis
 %
-st(1000*bsxfun(@times, T2est, T2mask), [0, 2000]); colormap('parula'), colorbar;
+st(1000*bsxfun(@times, T2est, T2mask), [0, 200]); colormap('parula'), colorbar;
 title('T2 map (ms)'); faxis
 stc(bsxfun(@times, proton, T2mask)); colormap('parula'), colorbar;
 title('proton density'); faxis
@@ -247,12 +275,12 @@ function kspaces = pfile2kspace(pfile)
     end 
     
     for c = 1:pfile.channels
-       kspace = GERecon('Pfile.KSpace', 1, 1, c);
+       kspace = GERecon('Pfile.KSpace',  1,1, c);
             % Discard reference views
        fullYRes = size(kspace, 2);
        yRes = fullYRes - numRefViews;
        kspace = kspace(:, 1:yRes);
-       kspace = kspace(end:-1:1,:);
+       %kspace = kspace(end:-1:1,:);
        kspace(:,2:2:end) = -kspace(:,2:2:end);
        %channelImage = GERecon('Transform', kspace);
        kspaces(:,:,c) = kspace;
