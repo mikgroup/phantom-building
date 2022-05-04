@@ -258,7 +258,7 @@ save T2fit.mat
 T2vals = T2est(T2est~=0);
 figure(1); hist(T2vals(T2vals<0.300)*1000, 600); faxis
 %
-st(1000*bsxfun(@times, T2est, T2mask), [0, 200]); colormap('parula'), colorbar;
+st(1000*bsxfun(@times, T2est, T2mask), [0, 300]); colormap('parula'), colorbar;
 title('T2 map(ms)'); faxis
 stc(bsxfun(@times, proton, T2mask)); colormap('parula'), colorbar;
 title('proton density'); faxis
